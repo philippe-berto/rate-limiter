@@ -54,7 +54,7 @@ func (r *RedisClient) StoreIP(ip string, expireSec int) (int, error) {
 	}
 	count, ok := result.(int64)
 	if !ok {
-		return 0, nil // or return an error if you prefer
+		return 0, nil
 	}
 	return int(count), nil
 }
@@ -75,7 +75,7 @@ func (r *RedisClient) StoreToken(token string, expireSec int) (int, error) {
 
 	count, ok := result.(int64)
 	if !ok {
-		return 0, nil // or return an error if you prefer
+		return 0, nil
 	}
 	return int(count), nil
 }
