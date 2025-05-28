@@ -40,7 +40,7 @@ func New(ctx context.Context, cfg RateLimiterConfig, db Database) *RateLimiter {
 }
 
 func (rl *RateLimiter) Middleware(next http.Handler) http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	fn := func(w http.ResponseWriter, r *http.Request) {
 		ip := strings.Split(r.Header.Get("X-Forwarded-For"), ",")[0]
 		token := r.Header.Get("api_key")
 
@@ -75,5 +75,7 @@ func (rl *RateLimiter) Middleware(next http.Handler) http.Handler {
 		}
 
 		next.ServeHTTP(w, r)
-	})
+	}
+
+	return http.HandlerFunc(fn)
 }
