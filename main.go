@@ -42,7 +42,14 @@ func New(ctx context.Context, cfg RateLimiterConfig, db Database) *RateLimiter {
 func (rl *RateLimiter) Middleware(next http.Handler) http.Handler {
 	fn := func(w http.ResponseWriter, r *http.Request) {
 		ip := strings.Split(r.Header.Get("X-Forwarded-For"), ",")[0]
-		token := r.Header.Get("api_key")
+		token := r.Header.Get("API_KEY")
+		//acees ip from chi middleware
+		if ip == "" {
+			ip = r.RemoteAddr
+			if strings.Contains(ip, ":") {
+				ip = strings.Split(ip, ":")[0] // Remove port if present
+			}
+		}
 
 		fmt.Println("IP:", ip)
 		fmt.Println("Token:", token)
